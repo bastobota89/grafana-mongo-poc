@@ -5,7 +5,7 @@ const cors = require('cors');
 const Record = require('./models/Record');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 // CORS configuration
 const corsOptions = {
