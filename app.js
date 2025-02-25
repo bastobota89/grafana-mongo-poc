@@ -7,12 +7,12 @@ const Record = require('./models/Record');
 const app = express();
 const port = process.env.PORT || 4000;
 
-// CORS configuration
+// CORS configuration - allow all origins
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:4000', 'http://localhost:8080'],
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  credentials: false,
   optionsSuccessStatus: 200
 };
 
