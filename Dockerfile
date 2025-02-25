@@ -12,8 +12,8 @@ RUN npm install
 # Copy application code
 COPY . .
 
-# Expose the application port
-EXPOSE 3000
+# Expose port 4000
+EXPOSE 4000
 
 # Set default command
 CMD ["npm", "start"] 

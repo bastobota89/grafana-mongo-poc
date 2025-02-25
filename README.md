@@ -9,7 +9,7 @@ This is a simple Node.js application that provides an API endpoint to fetch reco
    ```bash
    docker-compose up --build
    ```
-3. The application will be available at http://localhost:3000
+3. The application will be available at http://localhost:4000
 4. To seed the database with sample data:
    ```bash
    # If running locally:
@@ -69,13 +69,13 @@ Query Parameters:
 Example requests:
 ```bash
 # Get first 100 records (default)
-GET /api/data
+GET http://localhost:4000/api/data
 
 # Get 50 records from page 2
-GET /api/data?limit=50&page=2
+GET http://localhost:4000/api/data?limit=50&page=2
 
 # Get maximum allowed records (1000)
-GET /api/data?limit=1000
+GET http://localhost:4000/api/data?limit=1000
 ```
 
 Response format:

@@ -4,10 +4,10 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/records_db
-      - PORT=3000
+      - PORT=4000
     deploy:
       resources:
         limits:
