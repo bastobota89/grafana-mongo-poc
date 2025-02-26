@@ -28,18 +28,30 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.get('/api/data', async (req, res) => {
   try {
-    const { limit = 100, page = 1 } = req.query;
+    const { limit = 100, page = 1, from, to } = req.query;
     
     // Convert to numbers and validate
     const limitNum = Math.min(Math.max(parseInt(limit), 1), 1000);
     const pageNum = Math.max(parseInt(page), 1);
     const skip = (pageNum - 1) * limitNum;
 
-    // Get total count for pagination info
-    const totalRecords = await Record.countDocuments();
+    // Build query with time range if provided
+    const query = {};
+    if (from || to) {
+      query.timeline = {};
+      if (from) {
+        query.timeline.$gte = new Date(parseInt(from));
+      }
+      if (to) {
+        query.timeline.$lte = new Date(parseInt(to));
+      }
+    }
+
+    // Get total count for pagination info with time range filter
+    const totalRecords = await Record.countDocuments(query);
     
-    // Fetch records with pagination
-    const records = await Record.find()
+    // Fetch records with pagination and time range filter
+    const records = await Record.find(query)
       .sort({ timeline: -1 })
       .skip(skip)
       .limit(limitNum);
@@ -52,6 +64,10 @@ app.get('/api/data', async (req, res) => {
         page: pageNum,
         limit: limitNum,
         totalPages: Math.ceil(totalRecords / limitNum)
+      },
+      timeRange: {
+        from: from ? new Date(parseInt(from)) : null,
+        to: to ? new Date(parseInt(to)) : null
       }
     });
   } catch (error) {
