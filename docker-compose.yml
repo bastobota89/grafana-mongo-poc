@@ -37,7 +37,7 @@ services:
         reservations:
           memory: 2G
     volumes:
-      - mongodb_data:/data/db
+      - ./mongodb_data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s

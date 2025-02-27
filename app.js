@@ -28,10 +28,10 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.get('/api/data', async (req, res) => {
   try {
-    const { limit = 100, page = 1, from, to } = req.query;
+    const { limit = 10000, page = 1, from, to } = req.query;
     
     // Convert to numbers and validate
-    const limitNum = Math.min(Math.max(parseInt(limit), 1), 1000);
+    const limitNum = Math.min(Math.max(parseInt(limit), 1), 10000);
     const pageNum = Math.max(parseInt(page), 1);
     const skip = (pageNum - 1) * limitNum;
 
