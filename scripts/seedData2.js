@@ -37,11 +37,11 @@ function generateTitle() {
   return `${baseTitle} - ${lorem}`;
 }
 
-async function* recordGenerator(startIndex, count, startDate, endDate) {
+async function* recordGenerator(startIndex, count, startDate) {
   for (let i = 0; i < count; i++) {
     const coords = generateCoordinates();
     yield {
-      timeline: randomDate(startDate, endDate),
+      timeline: new Date(startDate.getTime() + i * 60000), // Increment by one minute
       title: generateTitle(),
       identifier: generateIdentifier(startIndex + i),
       lat: coords.lat,
@@ -80,13 +80,12 @@ async function seedData() {
     await Record.deleteMany({});
     console.log('Cleared existing records');
 
-    const totalRecords = 100000; // Increased number of records
-    const batchSize = 100; // Smaller batch size for memory efficiency
-    
-    // Set date range to last 3 months
+    // Calculate total records for every minute in the last 6 months
     const endDate = new Date();
     const startDate = new Date(endDate);
-    startDate.setMonth(endDate.getMonth() - 3);
+    startDate.setMonth(endDate.getMonth() - 6);
+    const totalRecords = Math.floor((endDate - startDate) / 60000); // Total minutes in 6 months
+    const batchSize = 100; // Smaller batch size for memory efficiency
 
     let successCount = 0;
     let failedCount = 0;
@@ -94,7 +93,7 @@ async function seedData() {
     // Process records in smaller batches
     for (let i = 0; i < totalRecords; i += batchSize) {
       const records = [];
-      const recordGen = recordGenerator(i, Math.min(batchSize, totalRecords - i), startDate, endDate);
+      const recordGen = recordGenerator(i, Math.min(batchSize, totalRecords - i), startDate);
       
       for await (const record of recordGen) {
         records.push(record);
